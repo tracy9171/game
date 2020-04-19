@@ -1,0 +1,10 @@
+spring:
+  profiles: prd
+  datasource:
+    url: jdbc:mysql://47.112.144.136:3306/wx_game?useSSL=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: tracy9171
+  redis:
+    password: By@269860517
+server:
+  port: 9098

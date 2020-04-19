@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wx.app.game.mapper.WxGameDataCountMapper">
+    <update id="updateData" parameterType="com.wx.app.game.dto.WxGameDataDto">
+        update wx_game_data_count set a_skip_count = ${aSkipCount} ,updated_time=sysdate()  where id=${id} and UNIX_TIMESTAMP(updated_time) =${updatedTime}
+    </update>
+
+
+
+    <select id="selectByIdLock" parameterType="java.lang.Integer" resultType="com.wx.app.game.Entity.WxGameDataCountEntity">
+        select * from wx_game_data_count where id=#{id} for update
+    </select>
+    <update id="updateDataLeLock" parameterType="com.wx.app.game.dto.WxGameDataDto">
+        update wx_game_data_count set a_skip_count = #{aSkipCount}   where id=#{id}
+    </update>
+</mapper>
