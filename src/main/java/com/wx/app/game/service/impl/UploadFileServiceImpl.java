@@ -26,8 +26,8 @@ public class UploadFileServiceImpl implements UploadFileService {
     @Autowired
     private SystemDirService systemDirService;
 
-    //http://47.112.144.136:8069/
-    @Value("${wx.game.host.url:http://47.112.144.136:9098/}")
+    //http://47.112.144.136:8069/     tomcat的端口号
+    @Value("${wx.game.host.url:http://47.112.144.136:8080/}")
     private String hostUrl;
 
     /**
