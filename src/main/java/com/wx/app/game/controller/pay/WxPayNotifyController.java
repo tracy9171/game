@@ -13,14 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 微信回调接口
  */
-@RequestMapping("/wx/game/pay")
+@RequestMapping("/wx/pay")
 @RestController
 public class WxPayNotifyController {
 
     @Autowired
     private WxNotifyService wxNotifyServiceImpl;
 
-    @RequestMapping("notify")
+    @RequestMapping("/notify")
     public void wxNotify(HttpServletRequest request, HttpServletResponse response){
         wxNotifyServiceImpl.weixin_notify(request,response);
     }

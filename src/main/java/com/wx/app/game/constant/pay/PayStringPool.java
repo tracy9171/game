@@ -25,4 +25,9 @@ public interface PayStringPool {
     String MCH_ID = "1595100911";//商户号
     String APPID = "wxfdf21db7915067e8";//公众号appid
     String API_KEY ="9076AE8B039CB1D79B8567891BA24A08";//公众号密钥
+
+    /**
+     * 微信支付回调地址
+     */
+        String WX_PAY_NOTIFY_URL="http://zuikuaiyouxi.com:9099/game/wx/pay/notify";
 }
