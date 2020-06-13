@@ -22,7 +22,6 @@ public class PayNotifyUtils {
                 resXml = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA["+r.getMsg()+"]]></return_msg></xml> ";
             }else {
                 resXml = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml> ";
-
             }
             BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
             out.write(resXml.getBytes());

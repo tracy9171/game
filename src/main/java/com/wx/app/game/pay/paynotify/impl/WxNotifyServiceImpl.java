@@ -4,12 +4,13 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.wx.app.game.constant.StringPools;
 import com.wx.app.game.constant.pay.PayStringPool;
 import com.wx.app.game.pay.paynotify.WxNotifyService;
-import com.wx.app.game.utils.pay.ConfigUtil;
+import com.wx.app.game.service.payService.OrderPayNotifyService;
 import com.wx.app.game.utils.pay.PayCommonUtil;
 import com.wx.app.game.utils.pay.PayNotifyUtils;
 import com.wx.app.game.utils.pay.XMLUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom.JDOMException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +28,8 @@ import java.util.TreeMap;
 @Slf4j
 public class WxNotifyServiceImpl implements WxNotifyService {
 
+    @Autowired
+    private OrderPayNotifyService orderPayNotifyServiceImpl;
 
     @Override
     public void weixin_notify(HttpServletRequest request, HttpServletResponse response) {
@@ -71,12 +74,9 @@ public class WxNotifyServiceImpl implements WxNotifyService {
             }
             String orderNo = (String) packageParams.get("out_trade_no");
             //更新订单状态成功，
-
-            //通知CP
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JDOMException e) {
+            R r = orderPayNotifyServiceImpl.toDoWxOrderNotify(orderNo);
+            PayNotifyUtils.response(response,r);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
