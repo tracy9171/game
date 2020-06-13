@@ -165,4 +165,13 @@ public class GameOrderServiceImpl extends ServiceImpl<WxGameOrderMapper, WxGameO
         return getOne(new QueryWrapper<WxGameOrderEntity>().eq("order_no", dto.getOrderNo()).eq("user_id", dto.getUserId()));
     }
 
+    /**
+     * 根据订单号查询游戏订单
+     * @param OrderNo
+     * @return
+     */
+    @Override
+    public WxGameOrderEntity getGameOrderByOrderNo(String OrderNo) {
+        return getOne(new QueryWrapper<WxGameOrderEntity>().eq("order_no", OrderNo).orderByDesc("created_date"));
+    }
 }

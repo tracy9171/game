@@ -15,4 +15,5 @@ public interface StringPools {
     String TIMESTAMP="timestamp";
 
     String SKIP_RECORD_KEY="SKIP_RECORD_DATA_KEY_TO_TAY";
+    String SUCCESS ="SUCCESS";
 }

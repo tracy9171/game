@@ -28,4 +28,10 @@ public interface GameOrderService extends IService<WxGameOrderEntity> {
      * @return
      */
     R updateOrderStatusByOrderNo(WxGameOrderDto dto);
+
+    /**
+     * 根据订单号查询游戏订单
+     * @return
+     */
+    WxGameOrderEntity getGameOrderByOrderNo(String OrderNo);
 }

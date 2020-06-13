@@ -1,32 +1,35 @@
 package com.wx.app.game.pay.paynotify.impl;
 
 import com.baomidou.mybatisplus.extension.api.R;
+import com.wx.app.game.constant.StringPools;
+import com.wx.app.game.constant.pay.PayStringPool;
 import com.wx.app.game.pay.paynotify.WxNotifyService;
 import com.wx.app.game.utils.pay.ConfigUtil;
 import com.wx.app.game.utils.pay.PayCommonUtil;
+import com.wx.app.game.utils.pay.PayNotifyUtils;
 import com.wx.app.game.utils.pay.XMLUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom.JDOMException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-
+/**
+ * 微信支付回调
+ */
 @Service
 @Slf4j
 public class WxNotifyServiceImpl implements WxNotifyService {
 
 
     @Override
-    public R weixin_notify(HttpServletRequest request) {
+    public void weixin_notify(HttpServletRequest request, HttpServletResponse response) {
         try {
             // 读取参数
             InputStream inputStream = request.getInputStream();
@@ -40,13 +43,14 @@ public class WxNotifyServiceImpl implements WxNotifyService {
             inputStream.close();
 
             // 解析xml成map
-            Map<String, String> m = XMLUtil.doXMLParse(sb.toString());
+            Map<String, String> notifyData = XMLUtil.doXMLParse(sb.toString());
+            log.info("wx_notify_result={}",notifyData);
             // 过滤空 设置 TreeMap
             SortedMap<Object, Object> packageParams = new TreeMap<>();
-            Iterator it = m.keySet().iterator();
+            Iterator it = notifyData.keySet().iterator();
             while (it.hasNext()) {
                 String parameter = (String) it.next();
-                String parameterValue = m.get(parameter);
+                String parameterValue = notifyData.get(parameter);
 
                 String v = "";
                 if (null != parameterValue) {
@@ -55,11 +59,20 @@ public class WxNotifyServiceImpl implements WxNotifyService {
                 packageParams.put(parameter, v);
             }
             // 账号信息
-            String key = ConfigUtil.API_KEY; // key
-            boolean tenpaySign = PayCommonUtil.isTenpaySign("UTF-8", packageParams, key);
+            boolean tenpaySign = PayCommonUtil.isTenpaySign("UTF-8", packageParams, PayStringPool.API_KEY);
+            if (!tenpaySign){
+                log.info("微信支付回调通知签名验证失败");
+                return ;
+            }
+            if (!StringPools.SUCCESS.equals(packageParams.get("result_code"))){
+                log.info("支付失败,错误信息：{}",packageParams.get("err_code"));
+                PayNotifyUtils.response(response,R.failed("报文为空"));
+                return;
+            }
+            String orderNo = (String) packageParams.get("out_trade_no");
+            //更新订单状态成功，
 
-
-
+            //通知CP
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -67,6 +80,8 @@ public class WxNotifyServiceImpl implements WxNotifyService {
             e.printStackTrace();
         }
 
-        return null;
     }
+
+
+
 }
