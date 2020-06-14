@@ -55,30 +55,23 @@ public class WxGamePayOrderServiceImpl implements WxGamePayOrderService {
     public R toPay(PayParamsDto dto, HttpServletRequest request) {
         log.info("advancePayment_dto={}",dto);
 
-        RedisLocks locks = new RedisLocks();
+        RedisLocks locks = new RedisLocks(10);
+        String key ="GAME:ORDER:PAY:PAY_LOCK_" + dto.getCpOrderNO();
+        if (!locks.lock(key)){
+            return R.failed("操作频繁，请稍后");
+        }
         WxGameOrderEntity gameOrderByOrderNo=null;
         String orderNo="";
         try {
-
-            //todo--------------保存订单到订单列表-----------------
              gameOrderByOrderNo = gameOrderServiceimpl.getGameOrderByCpOrderNo(dto.getCpOrderNO());
             if(gameOrderByOrderNo==null){
-                WxGameOrderEntity entity = new WxGameOrderEntity();
-                entity.setOrderStatus(1);
-                entity.setCpOrderNo(dto.getCpOrderNO());
-                entity.setUserId(dto.getUserId());
-                entity.setRoleId(dto.getRoleId());
-                entity.setOrderMoney(dto.getPayment());
-                entity.setPayMoney(dto.getPayment());
-                entity.setPlaceOrderDate(time);
-                entity.setGameId(dto.getGameId());
-                orderNo=DateUtils.getOrderNo();
-                entity.setOrderNo(orderNo);
-                gameOrderServiceimpl.save(entity);
+                //生成订单
+                saveOrder(dto,orderNo,1);
             }else {
                 if (gameOrderByOrderNo.getOrderStatus() !=1){
                     return R.failed("订单已处理！");
                 }
+                //更新订单信息
                 gameOrderByOrderNo.setCpOrderNo(dto.getCpOrderNO());
                 gameOrderByOrderNo.setUserId(dto.getUserId());
                 gameOrderByOrderNo.setRoleId(dto.getRoleId());
@@ -116,10 +109,7 @@ public class WxGamePayOrderServiceImpl implements WxGamePayOrderService {
 
             if (!"SUCCESS".equals(returnCode)){
                 log.info("订单号:{}错误信息:1{}",orderNo,returnMsg);
-
                 updateOrderStatus(dto,gameOrderByOrderNo,map.get("return_msg").toString(),orderNo);
-                //todo---------插入记录到补单列表-----状态为未通知----
-                //todo---------更新订单为下单失败---------
                 return R.failed("下单失败！！！！");
             }
             String resultCode = (String) map.get("result_code");
@@ -127,8 +117,6 @@ public class WxGamePayOrderServiceImpl implements WxGamePayOrderService {
             if (!"SUCCESS".equals(resultCode)){
                 log.info("订单号:{}错误信息:2{}",orderNo,errCodeDes);
                 updateOrderStatus(dto,gameOrderByOrderNo,map.get("err_code_des").toString(),orderNo);
-                //todo---------插入记录到补单列表----状态为待通知-----
-                //todo---------更新订单为下单失败---------
                 return R.failed("下单失败！");
             }
 
@@ -157,29 +145,32 @@ public class WxGamePayOrderServiceImpl implements WxGamePayOrderService {
             log.info("预支付成功={}",result);
             return R.ok(result);
         } catch (Exception e) {
-            //todo---------更新订单状态---------
             if (gameOrderByOrderNo !=null){
                 gameOrderServiceimpl.updateById(gameOrderByOrderNo);
             }else {
-                WxGameOrderEntity entity = new WxGameOrderEntity();
-                entity.setOrderStatus(3);
-                entity.setCpOrderNo(dto.getCpOrderNO());
-                entity.setUserId(dto.getUserId());
-                entity.setRoleId(dto.getRoleId());
-                entity.setOrderMoney(dto.getPayment());
-                entity.setPayMoney(dto.getPayment());
-                entity.setPlaceOrderDate(time);
-                entity.setGameId(dto.getGameId());
-                orderNo=DateUtils.getOrderNo();
-                entity.setOrderNo(orderNo);
-                gameOrderServiceimpl.save(entity);
+                saveOrder(dto,orderNo,3);
             }
-            //todo---------更新补单下单失败---------
            log.error("");
+        }finally {
+            locks.releaseLock(key);
         }
         return R.failed(new ErrorCode("服务繁忙"));
     }
 
+    //保存订单
+    private void saveOrder(PayParamsDto dto,String orderNo,int status){
+        WxGameOrderEntity entity = new WxGameOrderEntity();
+        entity.setOrderStatus(status);
+        entity.setCpOrderNo(dto.getCpOrderNO());
+        entity.setUserId(dto.getUserId());
+        entity.setRoleId(dto.getRoleId());
+        entity.setOrderMoney(dto.getPayment());
+        entity.setPayMoney(dto.getPayment());
+        entity.setPlaceOrderDate(time);
+        entity.setGameId(dto.getGameId());
+        entity.setOrderNo(orderNo);
+        gameOrderServiceimpl.save(entity);
+    }
 
     private void getParams(SortedMap<Object, Object> packageParams){
 
