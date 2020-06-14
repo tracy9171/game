@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -63,12 +64,12 @@ public class WxGameOrderEntity  implements  Serializable{
     /**
      * 订单金额
      */
-    private Double orderMoney;
+    private BigDecimal orderMoney;
 
     /**
      * 实收金额
      */
-    private Double payMoney;
+    private BigDecimal payMoney;
 
     /**
      * 下单时间
@@ -89,6 +90,18 @@ public class WxGameOrderEntity  implements  Serializable{
      * 1未支付、2支付成功、3支付失败
      */
     private Integer orderStatus;
+    /**
+     * 产品名称
+     */
+    private String productName;
+    /**
+     * 关联游戏id
+     */
+    private String gameId;
+    /**
+     * 支付状态说明
+     */
+    private String remark;
 
     private static final long serialVersionUID = 1L;
     private String createdBy;

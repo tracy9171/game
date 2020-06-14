@@ -33,5 +33,11 @@ public interface GameOrderService extends IService<WxGameOrderEntity> {
      * 根据订单号查询游戏订单
      * @return
      */
-    WxGameOrderEntity getGameOrderByOrderNo(String OrderNo);
+    WxGameOrderEntity getGameOrderByOrderNo(String crderNo);
+
+    /**
+     * 根据订单号查询游戏订单
+     * @return
+     */
+    WxGameOrderEntity getGameOrderByCpOrderNo(String cpOrderNo);
 }

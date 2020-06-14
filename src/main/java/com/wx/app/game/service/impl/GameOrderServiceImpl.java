@@ -174,4 +174,9 @@ public class GameOrderServiceImpl extends ServiceImpl<WxGameOrderMapper, WxGameO
     public WxGameOrderEntity getGameOrderByOrderNo(String OrderNo) {
         return getOne(new QueryWrapper<WxGameOrderEntity>().eq("order_no", OrderNo).orderByDesc("created_date"));
     }
+
+    @Override
+    public WxGameOrderEntity getGameOrderByCpOrderNo(String cpOrderNo) {
+        return getOne(new QueryWrapper<WxGameOrderEntity>().eq("cp_order_no", cpOrderNo).orderByDesc("created_date"));
+    }
 }

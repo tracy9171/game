@@ -13,7 +13,7 @@ public interface PayStringPool {
     String MINI_APP_SECRET = "ba8755223b3d1d3582bb332376a968b1";
 
     //微信支付回调接口
-    String NOTIFY_URL ="";
+    String NOTIFY_URL ="http://zuikuaiyouxi.com:9099/game/wx/pay/notify";
 
     String TRADE_TYPE = "JSAPI";
     String SIGN_TYPE = "MD5";
@@ -29,5 +29,5 @@ public interface PayStringPool {
     /**
      * 微信支付回调地址
      */
-        String WX_PAY_NOTIFY_URL="http://zuikuaiyouxi.com:9099/game/wx/pay/notify";
+        //String WX_PAY_NOTIFY_URL="http://zuikuaiyouxi.com:9099/game/wx/pay/notify";
 }

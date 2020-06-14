@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -62,12 +63,12 @@ public class WxReplacementOrderEntity  implements Serializable {
     /**
      * 订单金额
      */
-    private Double orderMoney;
+    private BigDecimal orderMoney;
 
     /**
      * 支付金额
      */
-    private Double payMoney;
+    private BigDecimal payMoney;
 
     /**
      * 下单时间
@@ -88,7 +89,18 @@ public class WxReplacementOrderEntity  implements Serializable {
      * 1未通知、2通知CP成功、3通知CP失败
      */
     private Integer notifyStatus;
-
+    /**
+     * 游戏关联id
+     */
+    private String gameId;
+    /**
+     * 支付状态
+     */
+    private Integer orderStatus;
+    /**
+     * 支付状态失败原因
+     */
+    private String remark;
     private static final long serialVersionUID = 1L;
     private String createdBy;
     private String updatedBy;
