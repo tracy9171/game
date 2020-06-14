@@ -1,5 +1,6 @@
 package com.wx.app.game.pay.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.api.R;
@@ -22,7 +23,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -153,6 +153,7 @@ public class WxGamePayOrderServiceImpl implements WxGamePayOrderService {
             result.put("package", packages);
             result.put("signType", "MD5");
             result.put("paySign",sign);
+            result.put("orderNo",orderNo);
             log.info("预支付成功={}",result);
             return R.ok(result);
         } catch (Exception e) {
@@ -219,5 +220,25 @@ public class WxGamePayOrderServiceImpl implements WxGamePayOrderService {
         gameOrderByOrderNo.setUpdatedDate(LocalDateTime.now());
         gameOrderByOrderNo.setRemark(message);
         gameOrderServiceimpl.updateById(gameOrderByOrderNo);
+    }
+
+    /**
+     *  查询游戏订单状态
+     * @param orderNo
+     * @return
+     */
+    @Override
+    public R selectOrderStatus(String orderNo) {
+        log.info("selectOrderStatus={}",orderNo);
+        if (StringUtils.isEmpty(orderNo)){
+            return R.failed("无效订单号");
+        }
+        WxGameOrderEntity order = gameOrderServiceimpl.getGameOrderByOrderNo(orderNo);
+        if (order == null){
+            return R.failed("无效订单");
+        }
+        JSONObject result = new JSONObject();
+        result.put("status",order.getOrderStatus());
+        return R.ok(result);
     }
 }

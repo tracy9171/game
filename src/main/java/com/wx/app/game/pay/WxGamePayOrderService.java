@@ -12,4 +12,6 @@ public interface WxGamePayOrderService {
      * @return
      */
     R toPay(PayParamsDto dto, HttpServletRequest request);
+
+    R selectOrderStatus(String orderNo);
 }
