@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 public class PayParamsDto implements Serializable {
     //系统类型
     @NotNull
-    private String systems;
+    private Integer systems;
     //角色id
     @NotNull
     private String roleId;

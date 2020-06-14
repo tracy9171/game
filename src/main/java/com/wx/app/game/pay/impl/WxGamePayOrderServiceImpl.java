@@ -66,6 +66,7 @@ public class WxGamePayOrderServiceImpl implements WxGamePayOrderService {
              gameOrderByOrderNo = gameOrderServiceimpl.getGameOrderByCpOrderNo(dto.getCpOrderNO());
             if(gameOrderByOrderNo==null){
                 //生成订单
+                orderNo=DateUtils.getOrderNo();
                 saveOrder(dto,orderNo,1);
             }else {
                 if (gameOrderByOrderNo.getOrderStatus() !=1){
@@ -148,6 +149,7 @@ public class WxGamePayOrderServiceImpl implements WxGamePayOrderService {
             if (gameOrderByOrderNo !=null){
                 gameOrderServiceimpl.updateById(gameOrderByOrderNo);
             }else {
+                orderNo=DateUtils.getOrderNo();
                 saveOrder(dto,orderNo,3);
             }
            log.error("");
@@ -169,6 +171,9 @@ public class WxGamePayOrderServiceImpl implements WxGamePayOrderService {
         entity.setPlaceOrderDate(time);
         entity.setGameId(dto.getGameId());
         entity.setOrderNo(orderNo);
+        entity.setProductName(dto.getProductName());
+        entity.setSystems(dto.getSystems());
+        entity.setRemark("初始下单");
         gameOrderServiceimpl.save(entity);
     }
 
