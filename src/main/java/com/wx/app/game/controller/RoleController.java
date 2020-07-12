@@ -30,28 +30,28 @@ public class RoleController {
     @Autowired
     private RoleService roleServiceImpl;
 
-    @NeedCheck(needCheck=true)
+    //@NeedCheck(needCheck=true)
     @ApiOperation(value = "保存角色信息")
     @PostMapping("save")
     public R saveRole(@Valid @RequestBody RoleDto dto){
         return roleServiceImpl.addRole(dto);
     }
 
-    @NeedCheck(needCheck=true)
+    //@NeedCheck(needCheck=true)
     @ApiOperation(value = "获取分页角色类表")
     @PostMapping("pageList")
     public R selectRoleList(@RequestBody RolePageDto dto) {
         return roleServiceImpl.getRoleList(dto);
     }
 
-    @NeedCheck(needCheck=true)
+    //@NeedCheck(needCheck=true)
     @ApiOperation(value = "获取分页角色类表")
     @PostMapping("selectOneByRoleId")
     public R selectOneByRoleId(@RequestBody RoleDto dto) {
         return roleServiceImpl.selectOneByRoleId(dto);
     }
 
-    @ApiOperation(value = "更新角色信息")
+    //@ApiOperation(value = "更新角色信息")
     @PostMapping("update")
     public R update(@RequestBody RoleDto dto){
         return roleServiceImpl.updateRole(dto);
