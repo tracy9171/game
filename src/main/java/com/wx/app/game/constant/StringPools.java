@@ -16,4 +16,7 @@ public interface StringPools {
 
     String SKIP_RECORD_KEY="SKIP_RECORD_DATA_KEY_TO_TAY";
     String SUCCESS ="SUCCESS";
+    String LOGIN_KEY="login:user";
+    Integer EXP = 60*60*24*200;
+    String TOKEN="token";
 }

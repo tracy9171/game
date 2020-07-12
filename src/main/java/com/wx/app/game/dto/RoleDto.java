@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import reactor.util.annotation.NonNull;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -59,4 +60,6 @@ public class RoleDto implements Serializable {
 
     @ApiModelProperty(name="战力")
     private String battle;
+    @NotBlank
+    private String token;
 }

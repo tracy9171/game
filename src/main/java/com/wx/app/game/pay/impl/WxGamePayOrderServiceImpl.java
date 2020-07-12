@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.wx.app.game.Entity.WxGameOrderEntity;
 import com.wx.app.game.Entity.WxReplacementOrderEntity;
+import com.wx.app.game.commom.CheckLoginService;
 import com.wx.app.game.commom.ErrorCode;
 import com.wx.app.game.constant.pay.PayStringPool;
 import com.wx.app.game.pay.WxGamePayOrderService;
@@ -38,7 +39,8 @@ public class WxGamePayOrderServiceImpl implements WxGamePayOrderService {
     private GameOrderService gameOrderServiceimpl;
     @Autowired
     private ReplacementOrderService replacementOrderServiceimpl;
-
+    @Autowired
+    private CheckLoginService checkLoginService;
     private Date time =new Date();
 
 
@@ -59,6 +61,12 @@ public class WxGamePayOrderServiceImpl implements WxGamePayOrderService {
         String key ="GAME:ORDER:PAY:PAY_LOCK_" + dto.getCpOrderNO();
         if (!locks.lock(key)){
             return R.failed("操作频繁，请稍后");
+        }
+
+        //登陆校验
+        R r = checkLoginService.checkToken(dto.getToken(), dto.getUserId());
+        if (r!=null){
+            return r;
         }
         WxGameOrderEntity gameOrderByOrderNo=null;
         String orderNo="";

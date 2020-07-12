@@ -50,4 +50,16 @@ public class RoleController {
     public R selectOneByRoleId(@RequestBody RoleDto dto) {
         return roleServiceImpl.selectOneByRoleId(dto);
     }
+
+    @ApiOperation(value = "更新角色信息")
+    @PostMapping("update")
+    public R update(@RequestBody RoleDto dto){
+        return roleServiceImpl.updateRole(dto);
+    }
+
+    @ApiOperation(value = "更新角色信息")
+    @PostMapping("getRoleByUserId")
+    public R getRoleByUserId(@RequestBody RoleDto dto){
+        return roleServiceImpl.getRoleByUserId(dto);
+    }
 }

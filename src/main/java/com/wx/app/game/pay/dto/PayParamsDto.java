@@ -3,6 +3,7 @@ package com.wx.app.game.pay.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -18,27 +19,29 @@ public class PayParamsDto implements Serializable {
     @NotNull
     private Integer systems;
     //角色id
-    @NotNull
+    @NotBlank
     private String roleId;
     //用户id
-    @NotNull
+    @NotBlank
     private String userId;
     //CP订单号
-    @NotNull
+    @NotBlank
     private  String  cpOrderNO;
     //游戏名称
-    @NotNull
+    @NotBlank
     private String gameName;
     //产品价格
     @NotNull
     private BigDecimal payment;
     //支付code
-    @NotNull
+    @NotBlank
     private String code;
     //游戏Id
-    @NotNull
+    @NotBlank
     private String gameId;
     //产品名称
-    @NotNull
+    @NotBlank
     private String productName;
+    @NotBlank
+    private String token;
 }

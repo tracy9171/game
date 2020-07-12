@@ -37,4 +37,18 @@ public interface RoleService extends IService<RoleEntity> {
      * @return
      */
     R selectOneByRoleId(RoleDto dto);
+
+    /**
+     * 更新角色信息
+     * @param dto
+     * @return
+     */
+    R updateRole(RoleDto dto);
+
+    /**
+     * 根据用户ID获取角色信息
+     *   只需要传userId
+     * @return
+     */
+    R getRoleByUserId(RoleDto dto);
 }

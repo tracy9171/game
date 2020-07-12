@@ -7,7 +7,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wx.app.game.Entity.RoleEntity;
 import com.wx.app.game.Entity.WxGameDataCountEntity;
+import com.wx.app.game.commom.CheckLoginService;
 import com.wx.app.game.commom.ErrorCode;
+import com.wx.app.game.constant.StringPools;
 import com.wx.app.game.dto.RoleDto;
 import com.wx.app.game.dto.RolePageDto;
 import com.wx.app.game.dto.WxGameLoginRecordDto;
@@ -24,6 +26,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
 /**
  * @ClassName RoleServiceImpl
  * @Description TODO
@@ -37,11 +43,16 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
 
     @Autowired
     private WxGameDataCountService wxGameDataCountServiceImpl;
+    @Autowired
+    private CheckLoginService checkLoginService;
     //新增角色判断角色ID是否存在，存在不支持新增
     @Override
     public R addRole(RoleDto dto) {
         log.info("addRole_dto={}",dto);
 
+        if (dto.getRoleId() == null){
+            dto.setRoleId(UUID.randomUUID().toString().replaceAll("-",""));
+        }
         if (CheckPramsUtils.isEmpty(dto.getRoleId(),dto.getGameAccount(),dto.getUserId())
                 || dto.getSystems() != null
                 || dto.getRegisterDate() !=null){
@@ -53,6 +64,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
         if (!lock.lock(key)){
             log.info("操作频繁");
             return R.failed(new ErrorCode(2,"请求太频繁"));
+        }
+        if (StringUtils.isEmpty(dto.getToken())){
+            return R.failed("token不能为空");
+        }
+        //登陆校验
+        R r = checkLoginService.checkToken(dto.getToken(), dto.getUserId());
+        if (r!=null){
+            return r;
         }
         try {
             if (getRole(dto) != null){
@@ -135,6 +154,60 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
     }
 
     private RoleEntity getRole(RoleDto dto){
-        return getOne(new QueryWrapper<RoleEntity>().eq("role_id", dto.getRoleId()));
+        return getOne(new QueryWrapper<RoleEntity>().eq("role_id", dto.getRoleId()).eq("is_delete", 1));
     }
+
+    /**
+     * 更新角色信息
+     * @param dto
+     * @return
+     */
+    @Override
+    public R updateRole(RoleDto dto) {
+        if(dto.getRoleId() == null){
+            return R.failed("缺少角色id");
+        }
+        if (StringUtils.isEmpty(dto.getToken())){
+            return R.failed("token不能为空");
+        }
+        //登陆校验
+        R r = checkLoginService.checkToken(dto.getToken(), dto.getUserId());
+        if (r!=null){
+            return r;
+        }
+        RoleEntity role = getRole(dto);
+        if (role == null){
+            return R.failed("角色不存在");
+        }
+        BeanUtils.copyProperties(dto,role);
+        role.setUpdatedDate(LocalDateTime.now());
+        if (updateById(role)){
+            return R.ok("");
+        }
+        return R.failed("更新失败");
+    }
+
+    /**
+     * 根据用户ID查询角色信息
+     * @param dto
+     * @return
+     */
+    @Override
+    public R getRoleByUserId(RoleDto dto) {
+        if (StringUtils.isEmpty(dto.getUserId())){
+            return R.failed("缺少userId");
+        }
+        if (StringUtils.isEmpty(dto.getToken())){
+            return R.failed("token不能为空");
+        }
+        //登陆校验
+        R r = checkLoginService.checkToken(dto.getToken(), dto.getUserId());
+        if (r!=null){
+            return r;
+        }
+        List<RoleEntity> list = list(new QueryWrapper<RoleEntity>().eq("user_id", dto.getUserId()).eq("is_delete", 1));
+        return R.ok(list);
+    }
+
+
 }
