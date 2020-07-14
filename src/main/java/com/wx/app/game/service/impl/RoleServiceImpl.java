@@ -54,8 +54,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
             dto.setRoleId(UUID.randomUUID().toString().replaceAll("-",""));
         }
         if (CheckPramsUtils.isEmpty(dto.getRoleId(),dto.getGameAccount(),dto.getUserId())
-                || dto.getSystems() != null
-                || dto.getRegisterDate() !=null){
+                || dto.getSystems() == null
+                || dto.getRegisterDate() ==null){
             log.info("新增角色缺少角色ID入参");
             return R.failed(new ErrorCode(1,"缺少必要参数"));
         }
@@ -69,7 +69,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
             return R.failed("token不能为空");
         }
         //登陆校验
-        R r = checkLoginService.checkToken(dto.getToken(), dto.getUserId());
+        R r = checkLoginService.checkToken(dto.getToken());
         if (r!=null){
             return r;
         }
@@ -171,7 +171,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
             return R.failed("token不能为空");
         }
         //登陆校验
-        R r = checkLoginService.checkToken(dto.getToken(), dto.getUserId());
+        R r = checkLoginService.checkToken(dto.getToken());
         if (r!=null){
             return r;
         }
@@ -201,7 +201,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
             return R.failed("token不能为空");
         }
         //登陆校验
-        R r = checkLoginService.checkToken(dto.getToken(), dto.getUserId());
+        R r = checkLoginService.checkToken(dto.getToken());
         if (r!=null){
             return r;
         }

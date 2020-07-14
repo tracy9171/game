@@ -4,13 +4,14 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 public class GameUserVo {
     @NotBlank
     private String code;
-    @NotBlank
-    private String gameId;
+    @NotNull
+    private Integer gameId;
     @ApiModelProperty(name="头像地址")
     private String avatar;
     @ApiModelProperty(name="昵称")

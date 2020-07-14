@@ -64,7 +64,7 @@ public class WxGamePayOrderServiceImpl implements WxGamePayOrderService {
         }
 
         //登陆校验
-        R r = checkLoginService.checkToken(dto.getToken(), dto.getUserId());
+        R r = checkLoginService.checkToken(dto.getToken());
         if (r!=null){
             return r;
         }

@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-@TableName(value  = "wx_admin_game")
+@TableName(value  = "wx_game_user")
 public class GameUserEntity extends BaseEntity {
     @TableId(value = "ID",type = IdType.AUTO)
     private Integer id;

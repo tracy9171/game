@@ -47,11 +47,12 @@ public class GameUserServiceImpl extends ServiceImpl<GameUserMapper, GameUserEnt
             BeanUtils.copyProperties(vo,userEntity);
             userEntity.setCreatedBy(vo.getNickname());
             userEntity.setUpdatedBy(vo.getNickname());
+            userEntity.setOpenId(openId);
             userEntity.setUserId(UUID.randomUUID().toString().replaceAll("-",""));
             save(userEntity);
         }
-        String key = StringPools.LOGIN_KEY + vo.getGameId() + openId;
-        String token = TokenUtil.getToken(key);
+        String token = TokenUtil.getToken(userEntity.getUserId());
+        String key = StringPools.LOGIN_KEY + userEntity.getUserId();
         redisClient.set(key,userEntity.getUserId(),StringPools.EXP);
         GameUserDto result = new GameUserDto();
         BeanUtils.copyProperties(userEntity,result);
