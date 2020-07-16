@@ -38,7 +38,7 @@ public class PayParamsDto implements Serializable {
     private String code;
     //游戏Id
     @NotBlank
-    private String gameId;
+    private Integer gameId;
     //产品名称
     @NotBlank
     private String productName;

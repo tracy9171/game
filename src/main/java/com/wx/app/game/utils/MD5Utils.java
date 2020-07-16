@@ -7,7 +7,7 @@ public class  MD5Utils {
     //main测试类
  
     public static  void main(String[] args) {
-        String result = getMD5("password",1);
+        String result = getMD5("tracy9171",1);
         System.err.println(result);
     }
 
@@ -61,7 +61,7 @@ public class  MD5Utils {
             }
             md5str.append(Integer.toHexString(digital));
         }
-        return md5str.toString().toUpperCase();
+        return md5str.toString();
     }
  
 }

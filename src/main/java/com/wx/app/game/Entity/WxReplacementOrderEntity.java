@@ -92,7 +92,7 @@ public class WxReplacementOrderEntity  implements Serializable {
     /**
      * 游戏关联id
      */
-    private String gameId;
+    private Integer gameId;
     /**
      * 支付状态
      */

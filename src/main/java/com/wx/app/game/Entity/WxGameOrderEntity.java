@@ -37,29 +37,9 @@ public class WxGameOrderEntity  implements  Serializable{
     private String userId;
 
     /**
-     * 玩家游戏id
-     */
-   // private String gameId;
-
-    /**
-     * 玩家账号
-     */
-    //private String gameAccount;
-
-    /**
-     * 角色名称
-     */
-    //private String roleName;
-
-    /**
      * 角色ID
      */
     private String roleId;
-
-    /**
-     * 游戏名称
-     */
-    //private String gameName;
 
     /**
      * 订单金额
@@ -77,11 +57,6 @@ public class WxGameOrderEntity  implements  Serializable{
     private Date placeOrderDate;
 
     /**
-     * 游戏区服
-     */
-   // private String gameArea;
-
-    /**
      * 1：安卓系统、2：IOS系统
      */
     private Integer systems;
@@ -97,7 +72,7 @@ public class WxGameOrderEntity  implements  Serializable{
     /**
      * 关联游戏id
      */
-    private String gameId;
+    private Integer gameId;
     /**
      * 支付状态说明
      */
@@ -108,4 +83,9 @@ public class WxGameOrderEntity  implements  Serializable{
     private String updatedBy;
     private LocalDateTime createdDate =LocalDateTime.now();
     private LocalDateTime updatedDate =LocalDateTime.now();
+
+    /**
+     * 通知CP状态、0未通知，1已通知
+     */
+    private Integer notifyStatus;
 }
