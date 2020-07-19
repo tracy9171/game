@@ -63,6 +63,11 @@ public class WxGamePayOrderServiceImpl implements WxGamePayOrderService {
             return R.failed("操作频繁，请稍后");
         }
 
+        //参数验签
+        R signs = checkLoginService.payVail(dto);
+        if (signs!=null){
+            return signs;
+        }
         //登陆校验
         R r = checkLoginService.checkToken(dto.getToken());
         if (r!=null){

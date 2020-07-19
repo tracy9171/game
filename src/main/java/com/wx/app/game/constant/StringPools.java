@@ -20,7 +20,7 @@ public interface StringPools {
     Integer EXP = 60*60*24*200;
     String TOKEN="token";
     /**
-     * CP支付回调密钥
+     * CP支付回调密钥、支付加签密钥
      */
     String APP_KEY = "f8b26d1d98759f8625ed367200e6aacb";
 

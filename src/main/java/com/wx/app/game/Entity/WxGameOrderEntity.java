@@ -88,4 +88,8 @@ public class WxGameOrderEntity  implements  Serializable{
      * 通知CP状态、0未通知，1已通知
      */
     private Integer notifyStatus;
+    /**
+     * 支付时间
+     */
+    private LocalDateTime payDate;
 }

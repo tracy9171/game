@@ -2,7 +2,9 @@ package com.wx.app.game.service.payService.impl;
 
 import com.baomidou.mybatisplus.extension.api.R;
 import com.wx.app.game.Entity.WxGameOrderEntity;
+import com.wx.app.game.commom.cpnotifypay.CpNotifyPayService;
 import com.wx.app.game.dto.pay.CpParamsDto;
+import com.wx.app.game.dto.pay.CpResultDto;
 import com.wx.app.game.service.GameOrderService;
 import com.wx.app.game.service.payService.OrderPayNotifyService;
 import com.wx.app.game.utils.MD5Utils;
@@ -24,7 +26,8 @@ public class OrderPayNotifyServiceImpl implements OrderPayNotifyService {
 
     @Autowired
     private GameOrderService gameOrderServiceImpl;
-
+    @Autowired
+    private CpNotifyPayService cpNotifyPayServiceImpl;
     /**
      * 处理游戏支付回调订单
      * @param orderNo
@@ -53,10 +56,11 @@ public class OrderPayNotifyServiceImpl implements OrderPayNotifyService {
             }
             orderEntity.setOrderStatus(2);
             orderEntity.setUpdatedDate(LocalDateTime.now());
+            orderEntity.setPayDate(LocalDateTime.now());
             boolean b = gameOrderServiceImpl.updateById(orderEntity);
             if (b){
-                //todo------------------------------
                 //通知CP支付成功
+                cpNotifyPayServiceImpl.cpNotify(orderEntity);
             }
             return R.ok("订单处理功能");
         } catch (Exception e) {

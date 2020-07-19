@@ -44,4 +44,6 @@ public class PayParamsDto implements Serializable {
     private String productName;
     @NotBlank
     private String token;
+    @NotBlank
+    private String sign;
 }
