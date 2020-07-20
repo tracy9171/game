@@ -3,6 +3,7 @@ package com.wx.app.game.commom.cpnotifypay;
 
 import com.wx.app.game.Entity.WxGameOrderEntity;
 import com.wx.app.game.constant.StringPools;
+import com.wx.app.game.constant.pay.PayStringPool;
 import com.wx.app.game.dto.pay.CpParamsDto;
 import com.wx.app.game.dto.pay.CpResultDto;
 import com.wx.app.game.service.GameOrderService;
@@ -39,6 +40,8 @@ public class CpNotifyPayServiceImpl implements CpNotifyPayService{
         try {
             CpParamsDto cpParamsDto = new CpParamsDto();
             cpParamsDto.setCpOrderNo(orderEntity.getCpOrderNo());
+            cpParamsDto.setOrderNo(orderEntity.getOrderNo());
+            cpParamsDto.setPayment(orderEntity.getPayMoney().toString());
             cpParamsDto.setGameId(orderEntity.getGameId());
             cpParamsDto.setOrderStatus(0);
             cpParamsDto.setUserId(orderEntity.getUserId());
@@ -52,7 +55,7 @@ public class CpNotifyPayServiceImpl implements CpNotifyPayService{
             String md5 = MD5Utils.getMD5(sign.toString());
             cpParamsDto.setSign(md5);
             log.info("cpNotify_通知CP入参={}",cpParamsDto);
-            CpResultDto result = restTemplate.postForObject("", null, CpResultDto.class, cpParamsDto);
+            CpResultDto result = restTemplate.postForObject(PayStringPool.CP_NOTIFY_RRL, null, CpResultDto.class, cpParamsDto);
             log.info("result={}",result);
             //更新订单通知CP状态
             notifyCp(result,orderEntity.getId());

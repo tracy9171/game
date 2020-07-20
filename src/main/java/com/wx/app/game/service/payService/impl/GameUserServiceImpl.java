@@ -37,7 +37,7 @@ public class GameUserServiceImpl extends ServiceImpl<GameUserMapper, GameUserEnt
      */
     @Override
     public R userLogin(GameUserVo vo) {
-        String openId = MobileUtil.getOpenId(vo.getCode());
+        String openId = MobileUtil.getGameOpenId(vo.getCode());
         if (StringUtils.isEmpty(openId)){
             return R.failed("登陆失败");
         }

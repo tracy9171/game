@@ -14,6 +14,16 @@ public class CpParamsDto implements Serializable {
      * cp订单号
      */
     private String cpOrderNo;
+
+    /**
+     * 订单号
+     */
+    private String orderNo;
+
+    /**
+     * 订单金额
+     */
+    private String payment;
     /**
      * 订单状态
      */

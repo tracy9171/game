@@ -76,6 +76,31 @@ public class MobileUtil {
 		}
 		return res;
 	}
+
+	/**
+   	  * 获取游戏方用户hopenID
+	 */
+	public static String getGameOpenId(String code){
+		if (code != null) {
+
+			StringBuffer url = new StringBuffer(PayStringPool.OPENID_URL);
+			url.append("appid=").append("wx7ceb29220df286f4")
+					.append("&secret=").append("0ce865f9b31412e9e397420e39987edc")
+					.append("&js_code=").append(code)
+					.append("&grant_type=authorization_code");
+
+			log.info("getOpenIdParams={}",url.toString());
+			String returnData = getReturnData(url.toString());
+			log.info("getOpenIdUrlResult={}",returnData);
+			Gson gson = new Gson();
+			OpenIdClass openIdClass = gson.fromJson(returnData,OpenIdClass.class);
+			if (openIdClass.getOpenid() != null) {
+				return openIdClass.getOpenid();
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * 回调request 参数解析为map格式
 	 * @Author  科帮网

@@ -15,6 +15,9 @@ public interface PayStringPool {
     //微信支付回调接口
     String NOTIFY_URL ="http://zuikuaiyouxi.com:9099/game/wx/pay/notify";
 
+    //Cp支付回调接口
+    String CP_NOTIFY_RRL="";
+
     String TRADE_TYPE = "JSAPI";
     String SIGN_TYPE = "MD5";
 
