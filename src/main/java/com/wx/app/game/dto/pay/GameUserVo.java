@@ -16,6 +16,8 @@ public class GameUserVo {
     private String avatar;
     @ApiModelProperty(name="昵称")
     private String nickname;
+    @ApiModelProperty(name="微信账户")
+    private String username;
     @ApiModelProperty(name="性别：0未知、1男、2女")
     private String gender;
     @ApiModelProperty(name="城市")

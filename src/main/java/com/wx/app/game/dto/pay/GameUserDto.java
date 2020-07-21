@@ -25,6 +25,6 @@ public class GameUserDto implements Serializable {
     @ApiModelProperty(name="国家")
     private String country;
     //游戏iD
-    private String gameId;
+    private Integer gameId;
     private String token;
 }

@@ -74,6 +74,17 @@ public class ResultBody implements Serializable {
     /**
      * 失败
      */
+    public static ResultBody error(int code, String message,Object data) {
+        ResultBody rb = new ResultBody();
+        rb.setCode(code);
+        rb.setMsg(message);
+        rb.setData(data);
+        return rb;
+    }
+
+    /**
+     * 失败
+     */
     public static ResultBody error( String message) {
         ResultBody rb = new ResultBody();
         rb.setCode(-1);

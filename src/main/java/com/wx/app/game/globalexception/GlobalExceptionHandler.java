@@ -2,11 +2,16 @@ package com.wx.app.game.globalexception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -49,6 +54,17 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	public ResultBody exceptionHandler(HttpServletRequest req, Exception e){
     	logger.error("未知异常！原因是:",e);
+    	if (e instanceof MethodArgumentNotValidException){
+			Map<String,Object> data = new HashMap<>();
+			MethodArgumentNotValidException methodArgumentNotValidException = (MethodArgumentNotValidException)e;
+			Iterator var5 = methodArgumentNotValidException.getBindingResult().getFieldErrors().iterator();
+			FieldError fieldError;
+			while(var5.hasNext()) {
+				fieldError = (FieldError)var5.next();
+				data.put(fieldError.getField(), fieldError.getDefaultMessage());
+			}
+    		return ResultBody.error(-1,"参数校验不通过",data);
+		}
        	return ResultBody.error(CommonEnum.INTERNAL_SERVER_ERROR);
     }
 }

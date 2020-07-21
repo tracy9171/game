@@ -37,6 +37,7 @@ public class GameUserServiceImpl extends ServiceImpl<GameUserMapper, GameUserEnt
      */
     @Override
     public R userLogin(GameUserVo vo) {
+        log.info("userLogin_vo={}",vo);
         String openId = MobileUtil.getGameOpenId(vo.getCode());
         if (StringUtils.isEmpty(openId)){
             return R.failed("登陆失败");
@@ -50,6 +51,9 @@ public class GameUserServiceImpl extends ServiceImpl<GameUserMapper, GameUserEnt
             userEntity.setOpenId(openId);
             userEntity.setUserId(UUID.randomUUID().toString().replaceAll("-",""));
             save(userEntity);
+        }else {
+            BeanUtils.copyProperties(vo,userEntity);
+            updateById(userEntity);
         }
         String token = TokenUtil.getToken(userEntity.getUserId());
         String key = StringPools.LOGIN_KEY + userEntity.getUserId();
