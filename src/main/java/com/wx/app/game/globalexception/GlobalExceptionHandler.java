@@ -2,6 +2,7 @@ package com.wx.app.game.globalexception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -54,8 +55,8 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	public ResultBody exceptionHandler(HttpServletRequest req, Exception e){
     	logger.error("未知异常！原因是:",e);
-    	if (e instanceof MethodArgumentNotValidException){
-			Map<String,Object> data = new HashMap<>();
+		Map<String,Object> data = new HashMap<>();
+		if (e instanceof MethodArgumentNotValidException){
 			MethodArgumentNotValidException methodArgumentNotValidException = (MethodArgumentNotValidException)e;
 			Iterator var5 = methodArgumentNotValidException.getBindingResult().getFieldErrors().iterator();
 			FieldError fieldError;
@@ -64,6 +65,16 @@ public class GlobalExceptionHandler {
 				data.put(fieldError.getField(), fieldError.getDefaultMessage());
 			}
     		return ResultBody.error(-1,"参数校验不通过",data);
+		}
+    	if (e instanceof BindException){
+			BindException bindException =(BindException)e;
+			Iterator<FieldError> iterator = bindException.getBindingResult().getFieldErrors().iterator();
+			FieldError fieldError;
+			while(iterator.hasNext()) {
+				fieldError = iterator.next();
+				data.put(fieldError.getField(), fieldError.getDefaultMessage());
+			}
+			return ResultBody.error(-1,"参数校验不通过",data);
 		}
        	return ResultBody.error(CommonEnum.INTERNAL_SERVER_ERROR);
     }
